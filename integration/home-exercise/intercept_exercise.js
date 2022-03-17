@@ -39,16 +39,18 @@ describe('intercept request', () => {
         cy.wait(4000)
         profile.typeFirstName(config.firsName);
         profile.typeLastName(config.lastName);
-        // apiHandler.interceptProfileUpdate();
+        apiHandler.interceptProfileUpdate();
         profile.saveProfile();
 
-        apiHandler.interceptProfileUpdate();
+        // apiHandler.interceptProfileUpdate();
 
         cy.wait('@profileAPI').then(($profile) => {
             let payload = $profile.request.body;
             expect(payload.FirstName, 'FirstName match').to.eq(config.firsName);
             expect(payload.LastName, 'LastName match').to.eq(config.lastName);
-
+            let response = $profile.response.body;
+            expect(response.FirstName, 'Response FirstName match').to.eq(config.firsName);
+            expect(response.LastName, 'Response LastName match').to.eq(config.lastName);
         });
     });
 
